@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOLIPAY</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f4f4;
+}
+
+/* AUTH */
+
+.auth-container{
+width:90%;
+max-width:400px;
+margin:40px auto;
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.logo{
+text-align:center;
+font-size:42px;
+font-weight:bold;
+color:#c40000;
+margin-bottom:20px;
+}
+
+.auth-container h2{
+text-align:center;
+margin-bottom:20px;
+color:#c40000;
+}
+
+input,select{
+width:100%;
+padding:15px;
+margin-top:15px;
+border-radius:12px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:20px;
+border:none;
+border-radius:12px;
+background:#c40000;
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.switch{
+text-align:center;
+margin-top:15px;
+color:#666;
+cursor:pointer;
+}
+
+/* DASHBOARD */
+
+.dashboard{
+display:none;
+}
+
+.header{
+background:linear-gradient(45deg,#b30000,#ff1a1a);
+padding:20px;
+color:white;
+text-align:center;
+font-size:35px;
+font-weight:bold;
+}
+
+.top-card{
+margin:15px;
+background:white;
+border-radius:25px;
+overflow:hidden;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.balance-section{
+background:linear-gradient(135deg,#c40000,#ff3333);
+padding:25px;
+color:white;
+}
+
+.balance-box{
+background:white;
+padding:20px;
+border-radius:20px;
+text-align:center;
+color:#c40000;
+}
+
+.balance{
+font-size:40px;
+font-weight:bold;
+margin-top:10px;
+}
+
+.button-row{
+display:flex;
+gap:10px;
+margin-top:20px;
+}
+
+.action-btn{
+flex:1;
+padding:15px;
+border:none;
+border-radius:15px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.claim-btn{
+background:white;
+color:#c40000;
+}
+
+.withdraw-btn{
+background:black;
+color:white;
+}
+
+.timer{
+margin-top:15px;
+text-align:center;
+font-size:18px;
+font-weight:bold;
+}
+
+.card{
+background:white;
+margin:15px;
+padding:20px;
+border-radius:20px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.card h3{
+margin-bottom:15px;
+color:#c40000;
+}
+
+.ref-box{
+background:#fff5f5;
+padding:20px;
+border-radius:15px;
+border:2px dashed #c40000;
+text-align:center;
+}
+
+.ref-code{
+font-size:28px;
+font-weight:bold;
+color:#c40000;
+}
+
+.stats{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.stat{
+background:linear-gradient(45deg,#c40000,#ff3333);
+padding:20px;
+border-radius:15px;
+text-align:center;
+color:white;
+}
+
+.transaction{
+background:#fafafa;
+padding:15px;
+border-left:5px solid #c40000;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.menu{
+display:flex;
+gap:10px;
+margin:15px;
+}
+
+.menu button{
+margin-top:0;
+}
+
+.page{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+z-index:999;
+overflow:auto;
+}
+
+.page-header{
+background:#c40000;
+padding:20px;
+color:white;
+text-align:center;
+font-size:28px;
+font-weight:bold;
+}
+
+.page-content{
+padding:20px;
+}
+
+.history-item{
+background:#fff5f5;
+padding:15px;
+border-radius:10px;
+border-left:5px solid #c40000;
+margin-bottom:10px;
+}
+
+.success{
+display:none;
+margin-top:20px;
+background:#e8ffe8;
+padding:15px;
+border-radius:10px;
+color:green;
+font-weight:bold;
+text-align:center;
+}
+
+.footer{
+text-align:center;
+padding:20px;
+color:#666;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div class="auth-container" id="loginBox">
+
+<div class="logo">JOLIPAY</div>
+
+<h2>Login</h2>
+
+<input type="email" id="loginEmail" placeholder="Email">
+
+<input type="password" id="loginPassword" placeholder="Password">
+
+<button onclick="loginUser()">Login</button>
+
+<div class="switch" onclick="showSignup()">
+Create Account
+</div>
+
+</div>
+
+<!-- SIGNUP -->
+
+<div class="auth-container" id="signupBox" style="display:none;">
+
+<div class="logo">JOLIPAY</div>
+
+<h2>Sign Up</h2>
+
+<input type="text" id="signupName" placeholder="Full Name">
+
+<input type="email" id="signupEmail" placeholder="Email">
+
+<input type="password" id="signupPassword" placeholder="Password">
+
+<button onclick="signupUser()">Create Account</button>
+
+<div class="switch" onclick="showLogin()">
+Already have account?
+</div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div class="dashboard" id="dashboard">
+
+<div class="header">
+JOLIPAY
+</div>
+
+<div class="top-card">
+
+<div class="balance-section">
+
+<div class="balance-box">
+
+<h2>Wallet Balance</h2>
+
+<div class="balance" id="balance">
+₦10,000
+</div>
+
+</div>
+
+<div class="button-row">
+
+<button class="action-btn claim-btn" id="claimBtn">
+CLAIM ₦500
+</button>
+
+<button class="action-btn withdraw-btn" onclick="openPage('unlockPage')">
+WITHDRAW
+</button>
+
+</div>
+
+<div class="timer">
+Claim Timer:
+<span id="claimTimer">15:00</span>
+</div>
+
+</div>
+
+</div>
+
+<!-- MENU -->
+
+<div class="menu">
+
+<button onclick="openPage('historyPage')">
+Transactions
+</button>
+
+<button onclick="openPage('pendingPage')">
+Pending
+</button>
+
+</div>
+
+<!-- REFERRAL -->
+
+<div class="card">
+
+<h3>Referral Code</h3>
+
+<div class="ref-box">
+
+<div class="ref-code" id="refCode">
+JOLLY00000
+</div>
+
+<p style="margin-top:10px;">
+Earn ₦1,500 Per Referral
+</p>
+
+</div>
+
+</div>
+
+<!-- STATS -->
+
+<div class="card">
+
+<h3>Statistics</h3>
+
+<div class="stats">
+
+<div class="stat">
+<h2>500,000</h2>
+<p>Transactions</p>
+</div>
+
+<div class="stat">
+<h2>1,000,000</h2>
+<p>Users</p>
+</div>
+
+</div>
+
+</div>
+
+<!-- RECENT ACTIVITY -->
+
+<div class="card">
+
+<h3>Recent Activity</h3>
+
+<div id="payments"></div>
+
+</div>
+
+</div>
+
+<!-- UNLOCK PAGE -->
+
+<div class="page" id="unlockPage">
+
+<div class="page-header">
+Pay To Unlock Withdrawal
+</div>
+
+<div class="page-content">
+
+<div class="card">
+
+<h3 style="text-align:center;">
+Complete Payment To Unlock
+</h3>
+
+<div style="
+background:#fff5f5;
+padding:20px;
+border-radius:15px;
+border:2px dashed #c40000;
+margin-top:20px;
+">
+
+<p style="font-size:18px;margin-bottom:15px;">
+<strong>Bank:</strong> Opay
+</p>
+
+<p style="font-size:18px;margin-bottom:15px;">
+<strong>Account Number:</strong> 9026186537
+</p>
+
+<p style="font-size:18px;margin-bottom:15px;">
+<strong>Account Name:</strong><br>
+Oyeniyi John Anuoluwapo
+</p>
+
+</div>
+
+<input type="file" id="unlockReceipt">
+
+<button onclick="unlockWithdraw()">
+Submit Receipt
+</button>
+
+<div class="success" id="unlockSuccess">
+Receipt Submitted Successfully
+</div>
+
+<button onclick="closePages()">
+Close
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- WITHDRAW PAGE -->
+
+<div class="page" id="withdrawPage">
+
+<div class="page-header">
+Withdrawal Request
+</div>
+
+<div class="page-content">
+
+<select>
+<option>Select Bank</option>
+<option>Opay</option>
+<option>GTBank</option>
+<option>UBA</option>
+<option>Access Bank</option>
+<option>Zenith Bank</option>
+</select>
+
+<input type="text" placeholder="Account Name">
+
+<input type="text" placeholder="Account Number">
+
+<input type="file">
+
+<button onclick="submitWithdraw()">
+Submit Request
+</button>
+
+<div class="success" id="withdrawSuccess">
+Withdrawal Request Submitted
+</div>
+
+<button onclick="closePages()">
+Close
+</button>
+
+</div>
+
+</div>
+
+<!-- HISTORY -->
+
+<div class="page" id="historyPage">
+
+<div class="page-header">
+Transaction History
+</div>
+
+<div class="page-content" id="historyList">
+
+<div class="history-item">
+No transactions yet
+</div>
+
+<button onclick="closePages()">
+Close
+</button>
+
+</div>
+
+</div>
+
+<!-- PENDING -->
+
+<div class="page" id="pendingPage">
+
+<div class="page-header">
+Pending Withdrawals
+</div>
+
+<div class="page-content" id="pendingList">
+
+<div class="history-item">
+No pending withdrawals
+</div>
+
+<button onclick="closePages()">
+Close
+</button>
+
+</div>
+
+</div>
+
+<div class="footer">
+© 2026 JOLIPAY
+</div>
+
+<script>
+
+/* LOGIN */
+
+function showSignup(){
+
+document.getElementById("loginBox").style.display="none";
+document.getElementById("signupBox").style.display="block";
+
+}
+
+function showLogin(){
+
+document.getElementById("signupBox").style.display="none";
+document.getElementById("loginBox").style.display="block";
+
+}
+
+function signupUser(){
+
+let name=document.getElementById("signupName").value;
+let email=document.getElementById("signupEmail").value;
+let password=document.getElementById("signupPassword").value;
+
+if(name===""||email===""||password===""){
+
+alert("Fill all fields");
+return;
+
+}
+
+localStorage.setItem("jp_name",name);
+localStorage.setItem("jp_email",email);
+localStorage.setItem("jp_password",password);
+
+alert("Account Created Successfully");
+
+showLogin();
+
+}
+
+function loginUser(){
+
+let email=document.getElementById("loginEmail").value;
+let password=document.getElementById("loginPassword").value;
+
+if(
+email===localStorage.getItem("jp_email")
+&&
+password===localStorage.getItem("jp_password")
+){
+
+localStorage.setItem("jolipay_loggedin","true");
+
+document.getElementById("loginBox").style.display="none";
+document.getElementById("dashboard").style.display="block";
+
+loadHistory();
+loadPending();
+loadBalance();
+
+}else{
+
+alert("Invalid Login");
+
+}
+
+}
+
+if(localStorage.getItem("jolipay_loggedin")==="true"){
+
+document.getElementById("loginBox").style.display="none";
+document.getElementById("dashboard").style.display="block";
+
+}
+
+/* REFERRAL */
+
+let savedReferral =
+localStorage.getItem("jolipay_referral");
+
+if(savedReferral){
+
+document.getElementById("refCode").innerHTML =
+savedReferral;
+
+}else{
+
+let newReferral =
+"JOLLY" +
+Math.floor(10000 + Math.random() * 90000);
+
+localStorage.setItem(
+"jolipay_referral",
+newReferral
+);
+
+document.getElementById("refCode").innerHTML =
+newReferral;
+
+}
+
+/* BALANCE */
+
+let balance =
+parseInt(localStorage.getItem("jolipay_balance")) || 10000;
+
+function loadBalance(){
+
+document.getElementById("balance").innerHTML =
+"₦" + balance.toLocaleString();
+
+}
+
+loadBalance();
+
+/* TIMER */
+
+let timerRunning =
+localStorage.getItem("jolipay_timerRunning") === "true";
+
+let claimSeconds =
+parseInt(localStorage.getItem("jolipay_claimSeconds")) || 900;
+
+let lastClaimTime =
+parseInt(localStorage.getItem("jolipay_lastClaimTime")) || 0;
+
+if(timerRunning){
+
+let now = Date.now();
+
+let elapsed =
+Math.floor((now - lastClaimTime) / 1000);
+
+claimSeconds = claimSeconds - elapsed;
+
+if(claimSeconds <= 0){
+
+claimSeconds = 900;
+
+timerRunning = false;
+
+localStorage.setItem(
+"jolipay_timerRunning",
+"false"
+);
+
+localStorage.setItem(
+"jolipay_claimSeconds",
+claimSeconds
+);
+
+}else{
+
+localStorage.setItem(
+"jolipay_claimSeconds",
+claimSeconds
+);
+
+localStorage.setItem(
+"jolipay_lastClaimTime",
+Date.now()
+);
+
+}
+
+}
+
+function updateTimerDisplay(){
+
+let mins = Math.floor(claimSeconds / 60);
+
+let secs = claimSeconds % 60;
+
+document.getElementById("claimTimer").innerHTML =
+`${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+
+}
+
+updateTimerDisplay();
+
+setInterval(function(){
+
+if(timerRunning){
+
+claimSeconds--;
+
+updateTimerDisplay();
+
+localStorage.setItem(
+"jolipay_claimSeconds",
+claimSeconds
+);
+
+if(claimSeconds <= 0){
+
+timerRunning = false;
+
+claimSeconds = 900;
+
+updateTimerDisplay();
+
+localStorage.setItem(
+"jolipay_timerRunning",
+"false"
+);
+
+localStorage.setItem(
+"jolipay_claimSeconds",
+claimSeconds
+);
+
+}
+
+}
+
+},1000);
+
+/* CLAIM */
+
+document.getElementById("claimBtn")
+.addEventListener("click",function(){
+
+if(!timerRunning){
+
+balance += 500;
+
+document.getElementById("balance").innerHTML =
+"₦" + balance.toLocaleString();
+
+localStorage.setItem(
+"jolipay_balance",
+balance
+);
+
+claimSeconds = 900;
+
+timerRunning = true;
+
+localStorage.setItem(
+"jolipay_timerRunning",
+"true"
+);
+
+localStorage.setItem(
+"jolipay_claimSeconds",
+claimSeconds
+);
+
+localStorage.setItem(
+"jolipay_lastClaimTime",
+Date.now()
+);
+
+updateTimerDisplay();
+
+addHistory("Claim Reward +₦500");
+
+alert("₦500 Added Successfully");
+
+}else{
+
+alert("Please wait for timer");
+
+}
+
+});
+
+/* HISTORY */
+
+function saveHistory(text){
+
+let history =
+JSON.parse(localStorage.getItem("jolipay_history")) || [];
+
+history.unshift(text);
+
+localStorage.setItem(
+"jolipay_history",
+JSON.stringify(history)
+);
+
+loadHistory();
+
+}
+
+function loadHistory(){
+
+let historyBox =
+document.getElementById("historyList");
+
+let history =
+JSON.parse(localStorage.getItem("jolipay_history")) || [];
+
+if(history.length===0){
+
+historyBox.innerHTML = `
+<div class="history-item">
+No transactions yet
+</div>
+
+<button onclick="closePages()">
+Close
+</button>
+`;
+
+return;
+
+}
+
+historyBox.innerHTML = "";
+
+history.forEach(function(item){
+
+historyBox.innerHTML += `
+<div class="history-item">
+${item}
+</div>
+`;
+
+});
+
+historyBox.innerHTML += `
+<button onclick="closePages()">
+Close
+</button>
+`;
+
+}
+
+function addHistory(text){
+
+saveHistory(text);
+
+}
+
+/* PENDING */
+
+function savePending(text){
+
+let pending =
+JSON.parse(localStorage.getItem("jolipay_pending")) || [];
+
+pending.unshift(text);
+
+localStorage.setItem(
+"jolipay_pending",
+JSON.stringify(pending)
+);
+
+loadPending();
+
+}
+
+function loadPending(){
+
+let pendingBox =
+document.getElementById("pendingList");
+
+let pending =
+JSON.parse(localStorage.getItem("jolipay_pending")) || [];
+
+if(pending.length===0){
+
+pendingBox.innerHTML = `
+<div class="history-item">
+No pending withdrawals
+</div>
+
+<button onclick="closePages()">
+Close
+</button>
+`;
+
+return;
+
+}
+
+pendingBox.innerHTML = "";
+
+pending.forEach(function(item){
+
+pendingBox.innerHTML += `
+<div class="history-item">
+${item}
+</div>
+`;
+
+});
+
+pendingBox.innerHTML += `
+<button onclick="closePages()">
+Close
+</button>
+`;
+
+}
+
+/* UNLOCK */
+
+function unlockWithdraw(){
+
+let receipt =
+document.getElementById("unlockReceipt").value;
+
+if(receipt===""){
+
+alert("Upload Receipt");
+
+return;
+
+}
+
+document.getElementById(
+"unlockSuccess"
+).style.display="block";
+
+addHistory("Unlock Payment Submitted");
+
+savePending("Unlock Payment Pending");
+
+setTimeout(function(){
+
+closePages();
+
+openPage("withdrawPage");
+
+},2000);
+
+}
+
+/* WITHDRAW */
+
+function submitWithdraw(){
+
+document.getElementById(
+"withdrawSuccess"
+).style.display="block";
+
+savePending("Pending Withdrawal Request");
+
+addHistory("Withdrawal Request Submitted");
+
+}
+
+/* PAGES */
+
+function openPage(id){
+
+document.getElementById(id).style.display="block";
+
+}
+
+function closePages(){
+
+let pages =
+document.querySelectorAll(".page");
+
+pages.forEach(function(page){
+
+page.style.display="none";
+
+});
+
+}
+
+/* RECENT ACTIVITY */
+
+const names=[
+"David James",
+"Sarah Johnson",
+"Michael Peter",
+"Grace Emmanuel",
+"Daniel Kings",
+"Mercy Bright",
+"Samuel Victor",
+"Henry Paul",
+"Queen Esther",
+"Faith Daniel"
+];
+
+const amounts=[
+"₦15,000",
+"₦30,000",
+"₦60,000"
+];
+
+function generatePayments(){
+
+let html="";
+
+for(let i=0;i<6;i++){
+
+let name =
+names[Math.floor(Math.random()*names.length)];
+
+let amount =
+amounts[Math.floor(Math.random()*amounts.length)];
+
+html += `
+<div class="transaction">
+<strong>${name}</strong><br>
+Completed transaction ${amount}
+</div>
+`;
+
+}
+
+document.getElementById("payments").innerHTML =
+html;
+
+}
+
+generatePayments();
+
+setInterval(generatePayments,1800000);
+
+</script>
+
+</body>
+</html>
